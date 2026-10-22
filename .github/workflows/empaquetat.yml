@@ -1,92 +1,60 @@
-name: Empaquetar comprova_desplegaments
-
-on: [push]
-
-jobs:
-  build-linux:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Descarrega el codi
-        uses: actions/checkout@v4
-
-      - name: Preparar Python 3.12
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Instal·lar PyInstaller
-        run: pip install pyinstaller
-
-      - name: Generar l'executable
-        run: pyinstaller --onefile comprova_desplegaments.py
-
-      - name: Guardar l'executable com a artefacte
-        uses: actions/upload-artifact@v4
-        with:
-          name: executable-linux
-          path: dist/comprova_desplegaments
-          if-no-files-found: error
-
-  build-macos:
-    runs-on: macos-latest
-    steps:
-      - name: Descarrega el codi
-        uses: actions/checkout@v4
-
-      - name: Preparar Python 3.12
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Instal·lar PyInstaller
-        run: pip install pyinstaller
-
-      - name: Generar l'executable
-        run: pyinstaller --onefile comprova_desplegaments.py
-
-      - name: Guardar l'executable com a artefacte
-        uses: actions/upload-artifact@v4
-        with:
-          name: executable-macos
-          path: dist/comprova_desplegaments
-          if-no-files-found: error
-
-  build-windows:
-    runs-on: windows-latest
-    steps:
-      - name: Descarrega el codi
-        uses: actions/checkout@v4
-
-      - name: Preparar Python 3.12
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Instal·lar PyInstaller
-        run: pip install pyinstaller
-
-      - name: Generar l'executable
-        run: pyinstaller --onefile comprova_desplegaments.py
-
-      - name: Guardar l'executable com a artefacte
-        uses: actions/upload-artifact@v4
-        with:
-          name: executable-windows
-          path: dist/comprova_desplegaments.exe
-          if-no-files-found: error
-
-  test-linux:
-    needs: build-linux
-    runs-on: ubuntu-latest
+  test-executables:
+    needs: [build-linux, build-macos, build-windows]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artefacte: executable-linux
+            binari: comprova_desplegaments
+          - os: macos-latest
+            artefacte: executable-macos
+            binari: comprova_desplegaments
+          - os: windows-latest
+            artefacte: executable-windows
+            binari: comprova_desplegaments.exe
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      BINARI: ./dist/${{ matrix.binari }}
     steps:
       - name: Descarregar l'executable
         uses: actions/download-artifact@v4
         with:
-          name: executable-linux
+          name: ${{ matrix.artefacte }}
           path: dist
 
       - name: Donar permisos d'execució
-        run: chmod +x dist/comprova_desplegaments
+        run: chmod +x "$BINARI"
 
       - name: Mostrar l'ajuda
-        run: ./dist/comprova_desplegaments --help
+        run: $BINARI --help
+
+      - name: Comprovar URLs passades com a paràmetre
+        run: $BINARI example.com github.com httpbin.org/status/500 --eixida informe.csv
+
+      - name: Comprovar que s'ha generat l'informe CSV
+        run: |
+          test -s informe.csv
+          cat informe.csv
+
+      - name: Comprovar URLs llegides des d'un fitxer
+        run: |
+          printf "# Desplegaments a comprovar\nexample.com\ngithub.com\n" > urls.txt
+          $BINARI --fitxer urls.txt
+
+      - name: Comprovar que falla si no rep cap URL
+        run: |
+          if $BINARI; then
+            echo "Hauria d'haver fallat sense URLs"
+            exit 1
+          fi
+          echo "Ha fallat com s'esperava"
+
+      - name: Guardar l'informe
+        uses: actions/upload-artifact@v4
+        with:
+          name: informe-${{ matrix.os }}
+          path: informe.csv
