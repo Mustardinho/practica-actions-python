@@ -1,6 +1,8 @@
 name: Empaquetar comprova_desplegaments
 
-on: [push]
+on:
+  push:
+    branches: [main]
 
 jobs:
   build-linux:
