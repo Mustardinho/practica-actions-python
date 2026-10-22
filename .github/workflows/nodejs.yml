@@ -2,7 +2,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [nodejs_linter_job]
+    branches: [nodejs_jest_job]
   
 jobs:
   linter:
