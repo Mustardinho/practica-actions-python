@@ -22,3 +22,43 @@ jobs:
       
       - name: Llistar el contingut de dist
         run: ls -la dist
+  
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Descarrega el codi
+        uses: actions/checkout@v4
+      
+      - name: PrepararPython 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      
+      - name: Instal·lar PyInstaller
+        run: pip install pyinstaller
+      
+      - name: Generar l'executable
+        run: pyinstaller --onefile comprova_desplegaments.py
+      
+      - name: Llistar el contingut de dist
+        run: ls -la dist
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Descarrega el codi
+        uses: actions/checkout@v4
+      
+      - name: Preparar Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      
+      - name: Instal·lar PyInstaller
+        runs: pip install pyinstaller
+      
+      - name: Generar l'executable
+        runs: pyinstaller --onefile comprova_desplegaments.py
+      
+      - name: Llistar el contingut de dist
+        runs: ls dist
