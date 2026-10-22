@@ -1,3 +1,80 @@
+name: Empaquetar comprova_desplegaments
+
+on: [push]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descarrega el codi
+        uses: actions/checkout@v4
+
+      - name: Preparar Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instal·lar PyInstaller
+        run: pip install pyinstaller
+
+      - name: Generar l'executable
+        run: pyinstaller --onefile comprova_desplegaments.py
+
+      - name: Guardar l'executable com a artefacte
+        uses: actions/upload-artifact@v4
+        with:
+          name: executable-linux
+          path: dist/comprova_desplegaments
+          if-no-files-found: error
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Descarrega el codi
+        uses: actions/checkout@v4
+
+      - name: Preparar Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instal·lar PyInstaller
+        run: pip install pyinstaller
+
+      - name: Generar l'executable
+        run: pyinstaller --onefile comprova_desplegaments.py
+
+      - name: Guardar l'executable com a artefacte
+        uses: actions/upload-artifact@v4
+        with:
+          name: executable-macos
+          path: dist/comprova_desplegaments
+          if-no-files-found: error
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Descarrega el codi
+        uses: actions/checkout@v4
+
+      - name: Preparar Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instal·lar PyInstaller
+        run: pip install pyinstaller
+
+      - name: Generar l'executable
+        run: pyinstaller --onefile comprova_desplegaments.py
+
+      - name: Guardar l'executable com a artefacte
+        uses: actions/upload-artifact@v4
+        with:
+          name: executable-windows
+          path: dist/comprova_desplegaments.exe
+          if-no-files-found: error
+
   test-executables:
     needs: [build-linux, build-macos, build-windows]
     strategy:
