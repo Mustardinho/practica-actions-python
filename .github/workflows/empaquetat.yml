@@ -1,0 +1,10 @@
+name: Empaquetar comprova_desplegaments
+
+on: [push]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Saludar
+        run: echo "Hola des de GitHub Actions"
