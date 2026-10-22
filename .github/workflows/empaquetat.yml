@@ -8,18 +8,18 @@ jobs:
     steps:
       - name: Descarrega el codi
         uses: actions/checkout@v4
-      
+
       - name: Preparar Python 3.12
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      
+
       - name: Instal·lar PyInstaller
         run: pip install pyinstaller
 
       - name: Generar l'executable
         run: pyinstaller --onefile comprova_desplegaments.py
-      
+
       - name: Guardar l'executable com a artefacte
         uses: actions/upload-artifact@v4
         with:
@@ -32,23 +32,23 @@ jobs:
     steps:
       - name: Descarrega el codi
         uses: actions/checkout@v4
-      
-      - name: PrepararPython 3.12
+
+      - name: Preparar Python 3.12
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      
+
       - name: Instal·lar PyInstaller
         run: pip install pyinstaller
-      
+
       - name: Generar l'executable
         run: pyinstaller --onefile comprova_desplegaments.py
-      
+
       - name: Guardar l'executable com a artefacte
         uses: actions/upload-artifact@v4
         with:
           name: executable-macos
-          pth: dist/comprova_desplegaments
+          path: dist/comprova_desplegaments
           if-no-files-found: error
 
   build-windows:
@@ -56,25 +56,25 @@ jobs:
     steps:
       - name: Descarrega el codi
         uses: actions/checkout@v4
-      
+
       - name: Preparar Python 3.12
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      
+
       - name: Instal·lar PyInstaller
         run: pip install pyinstaller
-      
+
       - name: Generar l'executable
         run: pyinstaller --onefile comprova_desplegaments.py
-      
+
       - name: Guardar l'executable com a artefacte
         uses: actions/upload-artifact@v4
         with:
           name: executable-windows
-          path: dist/comprova_desplegaments
+          path: dist/comprova_desplegaments.exe
           if-no-files-found: error
-  
+
   test-linux:
     needs: build-linux
     runs-on: ubuntu-latest
@@ -84,9 +84,9 @@ jobs:
         with:
           name: executable-linux
           path: dist
-      
+
       - name: Donar permisos d'execució
         run: chmod +x dist/comprova_desplegaments
-      
+
       - name: Mostrar l'ajuda
         run: ./dist/comprova_desplegaments --help
