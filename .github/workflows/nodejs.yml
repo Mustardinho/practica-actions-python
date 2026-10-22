@@ -5,7 +5,7 @@ on:
     branches: [nodejs_linter_job]
   
 jobs:
-  inter:
+  linter:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
