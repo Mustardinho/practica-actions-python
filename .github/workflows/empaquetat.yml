@@ -15,6 +15,9 @@ jobs:
           python-version: "3.12"
       
       - name: Instal·lar PyInstaller
+        run: pip install pyinstaller
+
+      - name: Generar l'executable
         run: pyinstaller --onefile comprova_desplegaments.py
       
       - name: Llistar el contingut de dist
