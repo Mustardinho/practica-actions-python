@@ -62,3 +62,19 @@ jobs:
       
       - name: Llistar el contingut de dist
         run: ls dist
+  
+  test-linux:
+    needs: build-linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descarregar l'executable
+        uses: actions/download-artifact@v4
+        with:
+          name: executable-linux
+          path: dist
+      
+      - name: Donar permisos d'execució
+        run: chmod +x dist/comprova_desplegaments
+      
+      - name: Mostrar l'ajuda
+        run: ./dist/comprova_desplegaments --help
