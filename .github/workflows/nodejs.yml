@@ -21,3 +21,15 @@ jobs:
       
       - name: Executar el linter
         run: npm run lint
+  
+  test-execution:
+    needs: linter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Run jest tests
+        run: |
+          npm install jest
+          npm test

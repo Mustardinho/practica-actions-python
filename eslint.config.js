@@ -10,6 +10,8 @@ module.exports = [
                 require: "readonly",
                 module: "writable",
                 console: "readonly",
+                test: "readonly",
+                expect: "readonly",
             },
         },
     },

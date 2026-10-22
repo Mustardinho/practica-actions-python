@@ -4,7 +4,8 @@
     "description": "Practica de GitHub Actions amb linter i tests",
     "main": "index.js",
     "scripts": {
-        "lint": "eslint ."
+        "lint": "eslint .",
+        "test": "jest"
     },
     "devDependencies": {
         "@eslint/js": "^9.0.0",
