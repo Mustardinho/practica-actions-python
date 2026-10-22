@@ -6,8 +6,8 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
-      - name: Saludar
-        run: echo "Hola des de GitHub Actions"
+      - name: Descarrega el codi
+        uses: actions/checkout@v4
       
       - name: Preparar Python 3.12
         uses: actions/setup-python@v5
