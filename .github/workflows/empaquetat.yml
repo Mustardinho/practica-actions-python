@@ -20,9 +20,13 @@ jobs:
       - name: Generar l'executable
         run: pyinstaller --onefile comprova_desplegaments.py
       
-      - name: Llistar el contingut de dist
-        run: ls -la dist
-  
+      - name: Guardar l'executable com a artefacte
+        uses: actions/upload-artifact@v4
+        with:
+          name: executable-linux
+          path: dist/comprova_desplegaments
+          if-no-files-found: error
+
   build-macos:
     runs-on: macos-latest
     steps:
@@ -40,8 +44,12 @@ jobs:
       - name: Generar l'executable
         run: pyinstaller --onefile comprova_desplegaments.py
       
-      - name: Llistar el contingut de dist
-        run: ls -la dist
+      - name: Guardar l'executable com a artefacte
+        uses: actions/upload-artifact@v4
+        with:
+          name: executable-macos
+          pth: dist/comprova_desplegaments
+          if-no-files-found: error
 
   build-windows:
     runs-on: windows-latest
@@ -60,8 +68,12 @@ jobs:
       - name: Generar l'executable
         run: pyinstaller --onefile comprova_desplegaments.py
       
-      - name: Llistar el contingut de dist
-        run: ls dist
+      - name: Guardar l'executable com a artefacte
+        uses: actions/upload-artifact@v4
+        with:
+          name: executable-windows
+          path: dist/comprova_desplegaments
+          if-no-files-found: error
   
   test-linux:
     needs: build-linux
