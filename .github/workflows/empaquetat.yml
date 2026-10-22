@@ -55,10 +55,10 @@ jobs:
           python-version: "3.12"
       
       - name: Instal·lar PyInstaller
-        runs: pip install pyinstaller
+        run: pip install pyinstaller
       
       - name: Generar l'executable
-        runs: pyinstaller --onefile comprova_desplegaments.py
+        run: pyinstaller --onefile comprova_desplegaments.py
       
       - name: Llistar el contingut de dist
-        runs: ls dist
+        run: ls dist
